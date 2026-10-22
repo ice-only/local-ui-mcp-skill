@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITOM Sketchbook - UI Components</title>
+    <!-- Use relative paths so it works fine with Vite base config -->
+    <link rel="stylesheet" href="./src/css/style.css" />
+  </head>
+  <body>
+    
+    <div id="app" class="book-scene">
+      
+      <div class="book">
+        
+        <!-- Book Cover -->
+        <div class="cover">
+          <div class="cover-content">
+            <h1 class="cover-title">ITom UI</h1>
+            <p class="cover-subtitle">Sketchbook Vol. 1</p>
+            <div class="cover-instruction">Click to Open</div>
+          </div>
+        </div>
+
+        <!-- Left Bookmarks (Anchor for Home) -->
+        <div class="bookmarks-container" id="leftBookmarks" style="left: 10%;">
+          <button class="bookmark active" data-filter="all" id="bookmark-home">Home</button>
+        </div>
+
+        <!-- Back to Grid Bookmark (Hidden initially) -->
+        <div class="bookmarks-container" id="componentBookmarks" style="display: none; left: 10%;">
+          <button class="bookmark active" id="btnBackToGrid">← Back to Notebook</button>
+        </div>
+
+        <!-- Right Bookmarks (Slider) -->
+        <div class="bookmarks-container slider-mode" id="gridBookmarks">
+          <button class="bookmark slider-arrow prev-arrow" id="btnPrevCategory" disabled>←</button>
+          
+          <div class="bookmarks-window">
+            <div class="bookmarks-track" id="bookmarksTrack">
+              <!-- Page 1 of categories -->
+              <div class="bookmarks-page active-page" data-page="0">
+                <button class="bookmark" data-filter="button">Buttons</button>
+                <button class="bookmark" data-filter="preloader">Preloaders</button>
+                <button class="bookmark" data-filter="page-transition">Page Transitions</button>
+              </div>
+              <!-- Page 2 of categories -->
+              <div class="bookmarks-page" data-page="1">
+                <button class="bookmark" data-filter="scroll-transition">Scroll Transitions</button>
+                <button class="bookmark" data-filter="scroll-trigger">Scroll Trigger</button>
+                <button class="bookmark" data-filter="navbar">Navbars</button>
+              </div>
+            </div>
+          </div>
+          
+          <button class="bookmark slider-arrow next-arrow" id="btnNextCategory">→</button>
+        </div>
+
+        <!-- Right Side Sticky Notes (Karteczki Post-it) -->
+        <div class="sticky-notes-container right-side">
+          <button class="sticky-note-tab note-pink" data-action="showcase">
+            <span class="note-text">Showcase</span>
+          </button>
+          <button class="sticky-note-tab note-blue" data-action="submit">
+            <span class="note-text">Submit</span>
+          </button>
+          <a href="https://github.com/ITomPoland/ui-components/discussions" target="_blank" rel="noopener noreferrer" class="sticky-note-tab note-yellow">
+            <span class="note-text">Discuss</span>
+          </a>
+          <a href="https://github.com/ITomPoland/ui-components/issues" target="_blank" rel="noopener noreferrer" class="sticky-note-tab note-green">
+            <span class="note-text">Proposal</span>
+          </a>
+        </div>
+
+        <!-- Left Base Page -->
+        <div class="page base-left-page">
+          <div class="notebook-margin-line"></div>
+          <div class="page-content" id="leftPageContainer">
+            <!-- Content injected here -->
+          </div>
+        </div>
+        
+        <!-- Right Base Page -->
+        <div class="page base-right-page">
+          <div class="notebook-margin-line"></div>
+          <div class="page-content" id="rightPageContainer">
+            <!-- Content injected here -->
+          </div>
+        </div>
+
+        <!-- Flipping Page (Dynamically used for transitions) -->
+        <div class="page flip-page" style="display: none;">
+          <!-- Front Face -->
+          <div class="page-face front">
+            <div class="notebook-margin-line"></div>
+            <div class="page-content" id="flipFrontContainer">
+            </div>
+          </div>
+          
+          <!-- Back Face -->
+          <div class="page-face back">
+            <div class="notebook-margin-line"></div>
+            <div class="page-content" id="flipBackContainer">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Templates -->
+    <template id="about-page-template">
+      <div class="about-page">
+        <div class="about-header">
+          <div class="avatar-container">
+            <img src="./avatar.jpg" alt="ITom Avatar" style="width: 100%; height: 100%; object-fit: cover;" />
+          </div>
+          <div class="about-title-group">
+            <h2 class="brand-title">ITOM UI</h2>
+            <p class="brand-subtitle">&lt;component library /&gt;</p>
+          </div>
+        </div>
+
+        <div class="about-mission">
+          <h3 class="mission-title">Hello! 👋</h3>
+          <p class="mission-text">
+            I created this sketchbook to share my knowledge and passion for building UI components!
+            <br><br>
+            It is designed especially for <strong>beginners</strong> who want to learn how to build modern UI interactions from scratch, without relying on heavy frameworks.
+            <br><br>
+            Copy, paste, experiment, and let's learn together! 🚀
+          </p>
+        </div>
+
+        <div class="about-actions">
+          <div class="search-sticky-note">
+            <input type="text" id="searchInput" placeholder="Search sketches..." autocomplete="off" />
+          </div>
+
+          <div class="sponsor-section">
+            <p class="sponsor-text">Found it useful? Support my work with a tip! ☕</p>
+            <a href="https://github.com/sponsors/ITomPoland" target="_blank" rel="noopener noreferrer" class="sponsor-btn">
+              Sponsor 💖
+            </a>
+          </div>
+        </div>
+      </div>
+    </template>
+    
+    <template id="grid-page-template">
+      <h1 class="page-title"></h1>
+      <section class="components-grid">
+      </section>
+    </template>
+
+    <template id="showcase-page-template">
+      <h1 class="page-title"></h1>
+      <section class="components-grid showcase-grid">
+      </section>
+    </template>
+    
+    <template id="submit-instructions-template">
+      <div class="submit-instructions-container">
+        <h2 class="brand-title">SUBMIT A SITE</h2>
+        <div class="instructions-card">
+          <h3 class="mission-title">Show off your craft! 🌟</h3>
+          <p class="mission-text">
+            Built something cool with our components? Submit it and get featured in the Showcase! ✨
+          </p>
+        </div>
+      </div>
+    </template>
+
+    <template id="submit-form-template">
+      <div class="submit-form-container">
+        <h2 class="page-title">SUBMISSION FORM</h2>
+        <form id="submitWebsiteForm" class="sketch-form">
+          <!-- Anti-spam Honeypot -->
+          <input type="text" name="_honeypot" id="honeypot" style="display:none" tabindex="-1" autocomplete="off" />
+          
+          <div class="form-group">
+            <label for="siteName">Website Name <span class="required-asterisk">*</span></label>
+            <input type="text" id="siteName" required maxlength="100" placeholder="e.g. My Creative Space" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="siteUrl">Website URL <span class="required-asterisk">*</span></label>
+            <input type="url" id="siteUrl" required maxlength="200" placeholder="https://..." autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label>Screenshot <span class="required-asterisk">*</span></label>
+            <p style="font-size: 0.8rem; color: var(--text-light-ink); margin-top: -0.3rem; margin-bottom: 0.5rem; font-family: var(--font-body);">
+              Must be exactly 16:10 ratio (e.g. 1600x1000px) and under 5MB. This matches the Showcase card perfectly!
+            </p>
+            <div class="file-drop-zone" id="screenshotDropZone">
+              <input type="file" id="siteScreenshot" accept="image/png, image/jpeg, image/webp" required />
+              <div class="drop-zone-content">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" class="drop-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                <span class="drop-zone-text">Click to upload or drag & drop</span>
+                <span class="drop-zone-hint">PNG, JPG or WEBP (max. 5MB)</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="authorName">Author</label>
+            <input type="text" id="authorName" maxlength="100" placeholder="e.g. John Doe" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="authorPortfolio">Portfolio / Agency URL</label>
+            <input type="url" id="authorPortfolio" maxlength="200" placeholder="https://yoursite.com" autocomplete="off" />
+          </div>
+          <div class="form-divider"></div>
+          <div class="form-group-row">
+            <div class="form-group form-group-half">
+              <label for="socialLinkedin">LinkedIn</label>
+              <input type="url" id="socialLinkedin" maxlength="200" placeholder="https://linkedin.com/in/..." autocomplete="off" />
+            </div>
+            <div class="form-group form-group-half">
+              <label for="socialX">X (Twitter)</label>
+              <input type="url" id="socialX" maxlength="200" placeholder="https://x.com/..." autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email <span class="form-optional">(optional)</span></label>
+            <input type="email" id="contactEmail" maxlength="150" placeholder="you@email.com — to hear if you got featured" autocomplete="off" />
+          </div>
+          <div class="form-divider"></div>
+          <div class="form-group">
+            <label>Component Used <span class="required-asterisk">*</span></label>
+            <div class="components-checkboxes">
+              <label class="checkbox-item">
+                <input type="checkbox" name="components" value="Buttons" />
+                <span>Buttons</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="components" value="Preloaders" />
+                <span>Preloaders</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="components" value="Page Transitions" />
+                <span>Page Transitions</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="components" value="Scroll Transitions" />
+                <span>Scroll Transitions</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="components" value="Scroll Trigger" />
+                <span>Scroll Trigger</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="components" value="Navbars" />
+                <span>Navbars</span>
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="submit-sketch-btn">SUBMIT SKETCH 🚀</button>
+        </form>
+      </div>
+    </template>
+    
+    <!-- SVG Filters for Squigglevision (Wiggly Sketch Effect) -->
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+      <defs>
+        <filter id="squiggle-0">
+          <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" result="noise" seed="0"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="squiggle-1">
+          <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" result="noise" seed="1"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="squiggle-2">
+          <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" result="noise" seed="2"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+    </svg>
+    <!-- Mobile Preview Banner -->
+    <div id="mobilePreviewBanner" class="mobile-preview-banner">
+      <div class="marquee-track">
+        <span class="marquee-text">✨ <strong>Preview Mode:</strong> For full interactive physics and source code, visit on desktop!</span>
+        <span class="marquee-text">✨ <strong>Preview Mode:</strong> For full interactive physics and source code, visit on desktop!</span>
+        <span class="marquee-text">✨ <strong>Preview Mode:</strong> For full interactive physics and source code, visit on desktop!</span>
+        <span class="marquee-text">✨ <strong>Preview Mode:</strong> For full interactive physics and source code, visit on desktop!</span>
+      </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="success-popup">
+      <h3>Thank you! 🎉</h3>
+      <p>Your submission has been sent for review. We'll check it as soon as possible! 📝✨</p>
+      <button class="success-close-btn" id="successCloseBtn">Close</button>
+    </div>
+
+    <script type="module" src="./src/js/main.js"></script>
+  </body>
+</html>

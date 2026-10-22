@@ -1,0 +1,14 @@
+# Local dependencies and runtime output
+node_modules/
+npm-debug.log*
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+
+# Nested source-repository metadata. The component files themselves remain tracked.
+**/.git/
+

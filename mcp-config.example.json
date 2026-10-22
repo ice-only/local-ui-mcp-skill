@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "local-ui-library": {
+      "command": "node",
+      "args": ["C:\\E\\ui\\mcp-server.mjs"]
+    }
+  }
+}

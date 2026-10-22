@@ -1,0 +1,13 @@
+const base = `http://127.0.0.1:${Number(process.env.UI_LIBRARY_PORT || 49183)}`;
+const fail = message => { throw new Error(message); };
+const page = await (await fetch(base + '/')).text();
+if (!page.includes('id="grid"') || !page.includes('id="tag"') || !page.includes('save-edit')) fail('首页控件缺失');
+const index = await (await fetch(base + '/api/components')).json();
+if (!index.total || !index.components?.length) fail('组件索引为空');
+const c = index.components[0];
+const encodePath = value => value.split('/').map(encodeURIComponent).join('/');
+const preview = await fetch(base + '/preview/' + encodePath(c.sourcePath));
+if (!preview.ok || !(await preview.text()).trim()) fail('组件预览不可读');
+const zip = await fetch(base + '/api/download?id=' + encodeURIComponent(c.id));
+if (!zip.ok || !zip.headers.get('content-type')?.includes('application/zip')) fail('组件下载失败');
+console.log(JSON.stringify({ok:true,total:index.total,first:c.name,preview:preview.status,download:zip.status}));

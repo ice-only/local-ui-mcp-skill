@@ -15,13 +15,13 @@ pause
 exit /b 1
 
 :use_pwsh
-pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-ui-library.ps1"
+pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-ui-library.ps1" -KillPortOwner
 exit /b %errorlevel%
 
 :use_powershell_path
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-ui-library.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-ui-library.ps1" -KillPortOwner
 exit /b %errorlevel%
 
 :use_system_powershell
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-ui-library.ps1"
+"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "%~dp0start-ui-library.ps1" -KillPortOwner
 exit /b %errorlevel%

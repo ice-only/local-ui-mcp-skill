@@ -1,5 +1,6 @@
 param(
-  [int]$PreferredPort = 49183
+  [int]$PreferredPort = 49183,
+  [switch]$KillPortOwner
 )
 
 $ErrorActionPreference = 'Stop'
@@ -15,6 +16,24 @@ if (-not $nodeCommand) {
 $nodePath = if ($nodeCommand.Source) { $nodeCommand.Source } else { $nodeCommand.Path }
 
 $selectedPort = $PreferredPort
+$currentProcessId = $PID
+$portOwners = @(Get-NetTCPConnection -State Listen -LocalPort $selectedPort -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique)
+if ($KillPortOwner -and $portOwners.Count -gt 0) {
+  foreach ($ownerProcessId in $portOwners) {
+    if ($ownerProcessId -eq $currentProcessId) { continue }
+    try {
+      $owner = Get-Process -Id $ownerProcessId -ErrorAction Stop
+      Write-Host "固定端口 $selectedPort 已被 $($owner.ProcessName) (PID $ownerProcessId) 占用，正在结束该进程..." -ForegroundColor Yellow
+      Stop-Process -Id $ownerProcessId -Force -ErrorAction Stop
+    } catch {
+      Write-Host "无法结束端口 $selectedPort 的占用进程 PID $ownerProcessId：$($_.Exception.Message)" -ForegroundColor Red
+      Read-Host '按 Enter 退出'
+      exit 1
+    }
+  }
+  Start-Sleep -Milliseconds 300
+}
+
 $listener = $null
 try {
   $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, $selectedPort)

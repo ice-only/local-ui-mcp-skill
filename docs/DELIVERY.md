@@ -53,7 +53,7 @@
 - 已统计素材库为 4,006 个文件、85 个目录。
 - 已确认主要文件类型为 3,834 个 HTML、36 个 JS、21 个 CSS。
 - 已通过 Node 语法检查：`server.mjs`、`src/app.js`。
-- 已提供一键启动脚本；默认从高位端口 `49183` 开始自动选择可用端口，并输出实际访问地址。
+- 已提供一键启动脚本；网站固定使用高位端口 `49183`，MCP HTTP 固定使用 `49184`，端口被占用时明确提示，不再随机切换端口。
 - 已修复批处理启动器的 PowerShell 探测：依次尝试 `pwsh.exe`、PATH 中的 `powershell.exe`，最后回退到 `%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe`；即使系统 PowerShell 未加入 PATH，也可以双击启动。
 - 已成功生成：`C:\E\ui\data\components.json`。
 - 已验证扫描结果为 3,812 个去重组件。
@@ -109,7 +109,7 @@
 - 当前不接入 Ollama、向量数据库和向量化；搜索和相似推荐均为本地确定性逻辑。
 - `npm test` 现在同时覆盖网站冒烟测试、MCP initialize/tools/list/tools/call、stdio 和 HTTP 传输。
 - 已补充 `server/discover` 现代 MCP 发现流程，支持 2026-07-28 现代协议并保留旧版握手回退。
-- 已通过 `start-ui-library-mcp.ps1 -PreferredPort 49210 -PortAttempts 1` 实际启动 HTTP 服务，健康检查成功，MCP 状态工具返回 3,812 个组件。
+- 已通过 `start-ui-library-mcp.ps1` 在固定端口 `49184` 实际启动 HTTP 服务，MCP 状态工具返回 3,812 个组件。
 - 已通过 PowerShell 语法检查、Node 语法检查和 `npm test`；最终测试结果为网站通过、MCP 工具 7 个、stdio 通过、HTTP 通过、扫描通过。
 - 最新 `npm run audit` 结果：3,812/3,812 预览可访问，坏预览 0，未解析裸模块依赖 0，Tailwind 适配缺失 0，运行时外部依赖 0；报告为 `C:\E\ui\logs\adaptation-audit-2026-10-22T13-26-17.418Z.json`。
 - Skill 当前以本地可移植文件交付，未上传为外部私有插件；如需上传，需要单独执行插件创建流程。

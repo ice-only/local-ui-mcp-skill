@@ -252,6 +252,10 @@ function transformExternalRuntimeRefs(html) {
   return html.replace(/url\(\s*(["']?)(https?:\/\/[^)"']+)\1\s*\)/gi, `url("${MISSING_IMAGE}")`);
 }
 
+function libraryRelative(file) {
+  return path.relative(LIBRARY, file).split(path.sep).join('/');
+}
+
 async function transformPreview(file, data) {
   let text = data.toString('utf8');
   if (file.endsWith(path.join('curved-arc-carousel', 'preview.html'))) {
@@ -262,7 +266,7 @@ async function transformPreview(file, data) {
     text = text.replace(/import Lenis from ['"]lenis['"];/, `const Lenis = globalThis.Lenis || class { constructor(){this.handlers={}} on(){} raf(){} };`);
     } catch {}
   }
-  const isUiverse = rel(file).startsWith('Uiverse.io/');
+  const isUiverse = libraryRelative(file).startsWith('Uiverse.io/');
   text = await repairMissingLocalRefs(file, text);
   text = transformExternalRuntimeRefs(text);
   const adapter = tailwindAdapter(text, isUiverse);
@@ -310,7 +314,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/download') { const index = await loadIndex(); const c = index.components.find(x => x.id === url.searchParams.get('id')); if (!c) return json(res, {error:'组件不存在'}, 404); return zipComponent(res, c); }
     if (url.pathname.startsWith('/preview/')) { const relative = decodeURIComponent(url.pathname.slice('/preview/'.length)); return serveFile(res, safePath(LIBRARY, relative), !url.searchParams.has('raw')); }
     const file = url.pathname === '/' ? path.join(SRC, 'index.html') : safePath(SRC, url.pathname.slice(1));
-    return serveFile(res, file);
+    return serveFile(res, file, false);
   } catch (e) { return json(res, {error: e.message}, 400); }
 });
 
